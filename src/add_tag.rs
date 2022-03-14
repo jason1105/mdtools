@@ -1,15 +1,14 @@
 use std::{
-    collections::{BTreeSet, HashSet},
+    collections::BTreeSet,
     ffi::OsString,
-    fs::File,
-    io::{BufReader, BufWriter, Error, ErrorKind, Read, Result, Write},
+    io::{BufReader, Error, ErrorKind, Result},
     path::PathBuf,
 };
 
 use clap::Args;
 use regex::Regex;
 
-use crate::RunCommand;
+use crate::{file_utils, RunCommand};
 
 static TAG_LINE_PATTERN: &str = r"^\s*tags\s*:\s*[ ]*\[.*\]\s*";
 
@@ -24,43 +23,37 @@ pub struct AddTag {
     path: PathBuf,
 }
 
+/// Implements the `RunCommand` trait.
 impl RunCommand for AddTag {
     fn run(&self) {
         self.add_tag()
     }
 }
 
+/// Implements the command of add-tag
 impl AddTag {
     fn add_tag(&self) {
-        println!("{:?}, {:?}", self.tags, self.path);
         let Self { tags, path } = self;
 
         // get files
-        let files = list_matched_files(path);
+        let files = file_utils::list_all_files(path);
         // add tags
         for file in files {
+            println!("Updating file : {}", file.as_os_str().to_str().unwrap());
             do_add_tag(&tags, &file);
         }
+        println!("Complete.");
     }
 }
 
+/// Add tags to file.
 pub fn do_add_tag(new_tags: &Vec<String>, file: &OsString) {
     let (line, start, end) = extract_tag_line(&file).unwrap();
-    let new_line = modify_tag(line, new_tags);
-    replace_in_file(&file, start, end, new_line);
+    let new_line = extend_tag(line, new_tags);
+    file_utils::replace_in_file(&file, start, end, new_line).unwrap();
 }
 
-/// list all file in given path
-fn list_matched_files(path: &PathBuf) -> Vec<OsString> {
-    use walkdir::WalkDir;
-    let mut paths = vec![];
-    for entry in WalkDir::new(path) {
-        println!("{}", entry.as_ref().unwrap().path().display());
-        paths.push(entry.unwrap().path().as_os_str().to_os_string());
-    }
-    paths
-}
-
+/// Extend tag line with new tags.
 /// # Examples
 /// ```no_run
 ///     let line = "tags: [a, b, c]";
@@ -68,8 +61,8 @@ fn list_matched_files(path: &PathBuf) -> Vec<OsString> {
 ///     let result = modify_tag(line.to_string(), &new_tags);
 ///     assert_eq!(result, "tags: [a, b, c, d, e]");
 /// ```
-fn modify_tag(line: String, new_tags: &Vec<String>) -> String {
-    let mut tags = line
+fn extend_tag(old_tag_line: String, new_tags: &Vec<String>) -> String {
+    let mut tags = old_tag_line
         .split_once("tags")
         .unwrap()
         .1
@@ -85,7 +78,6 @@ fn modify_tag(line: String, new_tags: &Vec<String>) -> String {
         .split(",")
         .map(|s| s.trim().to_string())
         .collect::<BTreeSet<String>>();
-    // tags.extend_from_slice(self.tags.as_slice());
     tags.extend(new_tags.iter().cloned());
 
     format!(
@@ -94,7 +86,7 @@ fn modify_tag(line: String, new_tags: &Vec<String>) -> String {
     )
 }
 
-// return (line, start_position, end_position)
+/// Extract tag line from given file. As well as start and end position of the tag line.
 pub fn extract_tag_line(file: &OsString) -> Result<(String, usize, usize)> {
     use std::io::BufRead;
 
@@ -110,15 +102,15 @@ pub fn extract_tag_line(file: &OsString) -> Result<(String, usize, usize)> {
     let re = Regex::new(TAG_LINE_PATTERN).unwrap();
 
     let mut reader = BufReader::new(file);
-    let (mut i, mut j) = (0, 0);
+    let (mut i, mut _j) = (0, 0);
     loop {
         let mut line = String::new();
         match reader.read_line(&mut line) {
             Ok(0) => return Err(Error::new(ErrorKind::Other, "No tag line found")),
             Ok(size) => {
                 if re.is_match(&line) {
-                    j = i + size;
-                    return Ok((String::from(line), i, j));
+                    _j = i + size;
+                    return Ok((String::from(line), i, _j));
                 } else {
                     i += size;
                 }
@@ -131,40 +123,11 @@ pub fn extract_tag_line(file: &OsString) -> Result<(String, usize, usize)> {
     }
 }
 
-fn replace_in_file(file: &OsString, start: usize, end: usize, content: String) -> Result<()> {
-    use std::fs::OpenOptions;
-
-    let file1 = file.clone();
-    let mut buf = String::new();
-    {
-        let file_for_read = OpenOptions::new()
-            .read(true)
-            .write(true)
-            .create(true)
-            .open(file1)?;
-
-        let mut reader = BufReader::new(file_for_read);
-        reader.read_to_string(&mut buf)?;
-    }
-
-    let file_for_write = OpenOptions::new()
-        .read(true)
-        .write(true)
-        .create(true)
-        .open(file)?;
-    let mut writer = BufWriter::new(file_for_write);
-
-    let buf = buf.replace(&buf[start..end], &format!("\n{}\n", content));
-    writer.write_all(buf.as_bytes())?;
-
-    Ok(())
-}
-
 #[test]
 fn test_modify_tag() {
     let line = "tags: [a, b, c]";
     let new_tags = vec!["d".to_string(), "e".to_string()];
-    let result = modify_tag(line.to_string(), &new_tags);
+    let result = extend_tag(line.to_string(), &new_tags);
     assert_eq!(result, "tags: [a, b, c, d, e]");
 
     let re = Regex::new(TAG_LINE_PATTERN).unwrap();

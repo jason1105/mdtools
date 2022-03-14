@@ -17,12 +17,12 @@ enum Commands {
 }
 
 fn main() {
-    // let args = Cli::parse();
+    let args = Cli::parse();
 
-    // match args.command {
-    //     Commands::AddTag(add_tag_command) => {
-    //         print!("{:?}", add_tag_command);
-    //         add_tag_command.run();
-    //     }
-    // }
+    match args.command {
+        Commands::AddTag(add_tag_command) => {
+            print!("{:?}", add_tag_command);
+            add_tag_command.run();
+        }
+    }
 }
