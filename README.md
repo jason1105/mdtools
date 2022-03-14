@@ -17,7 +17,7 @@ tags: [readings]
 Run command
 
 ```
-$ hugox add-tag C:\mdfiles news books
+$ hugox add-tag C:\mdfiles\ news books
 ```
 
 After run
