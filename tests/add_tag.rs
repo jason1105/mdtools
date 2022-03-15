@@ -3,11 +3,7 @@ use hugox::{
     file_utils,
 };
 use lazy_static::lazy_static;
-use std::{
-    ffi::OsString,
-    fs::OpenOptions,
-    io::{Read, Write},
-};
+use std::{ffi::OsString, fs::OpenOptions, io::Read};
 
 // "./tests/30daysOS-第02天 汇编语言和Makefile入门.md"
 lazy_static! {
@@ -18,13 +14,15 @@ lazy_static! {
 
 #[test]
 fn test_extract_tag_line() {
+    file_utils::copy(&ORIGIN_FILE.to_str().unwrap(), &FILE.to_str().unwrap()).unwrap();
     let (line, start, end) = extract_tag_line(&FILE).unwrap();
     assert_eq!(line, "tags: [学习笔记, 学习, 笔记]\n");
-    assert_eq!(start, 16);
-    assert_eq!(end, 53);
+    assert_eq!(start, 37);
+    assert_eq!(end, 74);
+    //std::fs::remove_file(&FILE.to_str().unwrap()).unwrap();
+    file_utils::remove_file(&FILE.to_str().unwrap()).unwrap();
 }
 
-#[test]
 #[test]
 fn test_do_add_tag() {
     // prepare file for test
@@ -40,8 +38,6 @@ fn test_do_add_tag() {
     let mut buf = String::new();
     let mut file_for_read = OpenOptions::new()
         .read(true)
-        .write(true)
-        .create(true)
         .open(&FILE.to_str().unwrap())
         .unwrap();
     file_for_read.read_to_string(&mut buf).unwrap();
@@ -50,5 +46,8 @@ fn test_do_add_tag() {
         assert!(buf.contains(tag));
     });
 
-    std::fs::remove_file(&FILE.to_str().unwrap()).unwrap();
+    println!("file: {:?}", file_for_read);
+
+    //std::fs::remove_file(&FILE.to_str().unwrap()).unwrap();
+    file_utils::remove_file(&FILE.to_str().unwrap()).unwrap();
 }

@@ -32,6 +32,7 @@ impl RunCommand for AddTag {
 
 /// Implements the command of add-tag
 impl AddTag {
+    /// Entry point of the command add_tag.
     fn add_tag(&self) {
         let Self { tags, path } = self;
 
@@ -54,11 +55,14 @@ pub fn do_add_tag(new_tags: &Vec<String>, file: &OsString) {
 }
 
 /// Extend tag line with new tags.
+///
 /// # Examples
-/// ```no_run
+///
+/// ```text
+///     use hugox::add_tag::extend_tag;
 ///     let line = "tags: [a, b, c]";
 ///     let new_tags = vec!["d".to_string(), "e".to_string()];
-///     let result = modify_tag(line.to_string(), &new_tags);
+///     let result = extend_tag(line.to_string(), &new_tags);
 ///     assert_eq!(result, "tags: [a, b, c, d, e]");
 /// ```
 fn extend_tag(old_tag_line: String, new_tags: &Vec<String>) -> String {
@@ -87,6 +91,29 @@ fn extend_tag(old_tag_line: String, new_tags: &Vec<String>) -> String {
 }
 
 /// Extract tag line from given file. As well as start and end position of the tag line.
+///
+/// For example, `note.md` included a frontmatter like this:
+///
+/// ```text
+/// // note.md
+/// ---
+/// title: "30天自制操作系统"
+/// tags: [学习笔记, 学习, 笔记]
+/// draft: false
+/// description: "30天自制操作系统"
+/// source: "http://hrb.osask.jp/"
+/// ---
+/// ```
+///
+/// ```no_run
+///     use hugox::add_tag::extract_tag_line;
+///     use std::ffi::OsString;
+///
+///     let (line, start, end) = extract_tag_line(&OsString::from("note.md")).unwrap();
+///     assert_eq!(line, "tags: [学习笔记, 学习, 笔记]\n");
+///     assert_eq!(start, 16);
+///     assert_eq!(end, 53);
+/// ```
 pub fn extract_tag_line(file: &OsString) -> Result<(String, usize, usize)> {
     use std::io::BufRead;
 

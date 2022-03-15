@@ -1,5 +1,5 @@
 ---
-title: "30"
+title: "30天自制操作系统"
 tags: [学习笔记, 学习, 笔记]
 draft: false
 description: "30天自制操作系统"

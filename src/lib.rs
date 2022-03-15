@@ -1,3 +1,4 @@
+//! `hugox` is a library for managing markdown files.
 pub mod add_tag;
 pub mod file_utils;
 
