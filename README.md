@@ -1,7 +1,11 @@
 # hugox
 A companion to help edit markdown files.
 
-# Add tags
+# Subcommands
+
+## Add tags
+
+Update tags of frontmatter of files.
 
 Before run
 
@@ -17,7 +21,7 @@ tags: [readings]
 Run command
 
 ```
-$ hugox add-tag C:\mdfiles\ news books
+$ hugox add-tag "C:\mdfiles\" news books
 ```
 
 After run
