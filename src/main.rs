@@ -1,6 +1,22 @@
-// hugox subcommand flags... arguments... paths...
-use clap::{Parser, Subcommand};
-use hugox::RunCommand;
+// mdtools subcommand flags... arguments... paths...
+
+mod commands;
+
+mod prelude {
+    pub use crate::commands::*;
+    pub use clap::Args;
+    pub use clap::{Parser, Subcommand};
+    pub use mdtools::file_utils;
+    pub use regex::Regex;
+    pub use std::{
+        collections::BTreeSet,
+        ffi::OsString,
+        io::{BufReader, Error, ErrorKind, Result},
+        path::PathBuf,
+    };
+}
+
+use prelude::*;
 
 /// Simple program to add tags to files.
 #[derive(Parser)]
@@ -13,7 +29,7 @@ struct Cli {
 #[derive(Subcommand, Debug)]
 enum Commands {
     /// Add tags to file.
-    AddTag(hugox::add_tag::AddTag),
+    AddTag(add_tag::AddTag),
 }
 
 fn main() {

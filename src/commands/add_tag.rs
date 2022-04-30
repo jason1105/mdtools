@@ -1,14 +1,4 @@
-use std::{
-    collections::BTreeSet,
-    ffi::OsString,
-    io::{BufReader, Error, ErrorKind, Result},
-    path::PathBuf,
-};
-
-use clap::Args;
-use regex::Regex;
-
-use crate::{file_utils, RunCommand};
+use crate::prelude::*;
 
 static TAG_LINE_PATTERN: &str = r"^\s*tags\s*:\s*[ ]*\[.*\]\s*";
 
