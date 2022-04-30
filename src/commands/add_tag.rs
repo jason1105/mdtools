@@ -96,7 +96,7 @@ fn extend_tag(old_tag_line: &str, new_tags: &[String]) -> String {
 /// ```
 ///
 /// ```no_run
-///     use hugox::add_tag::extract_tag_line;
+///     use mdtools::commands::add_tag::extract_tag_line;
 ///     use std::ffi::OsString;
 ///
 ///     let (line, start, end) = extract_tag_line(&OsString::from("note.md")).unwrap();

@@ -1,20 +1,9 @@
 #![warn(clippy::all, clippy::pedantic)]
 
 // mdtools subcommand flags... arguments... paths...
-mod commands;
-
 mod prelude {
-    pub use crate::commands::*;
-    pub use clap::Args;
     pub use clap::{Parser, Subcommand};
-    pub use mdtools::file_utils;
-    pub use regex::Regex;
-    pub use std::{
-        collections::BTreeSet,
-        ffi::OsString,
-        io::{BufReader, Error, ErrorKind, Result},
-        path::PathBuf,
-    };
+    pub use mdtools::commands::*;
 }
 
 use prelude::*;

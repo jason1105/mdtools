@@ -1,8 +1,6 @@
-use hugox::{
-    add_tag::{do_add_tag, extract_tag_line},
-    file_utils,
-};
 use lazy_static::lazy_static;
+use mdtools::commands::add_tag::*;
+use mdtools::file_utils;
 use std::{ffi::OsString, fs::OpenOptions, io::Read};
 
 // "./tests/30daysOS-第02天 汇编语言和Makefile入门.md"
@@ -33,7 +31,7 @@ fn test_do_add_tag() {
         "这是另一个测试字符串".to_string(),
     ];
 
-    do_add_tag(&new_tags, &FILE);
+    add_new_tag(&new_tags, &FILE);
 
     let mut buf = String::new();
     let mut file_for_read = OpenOptions::new()
