@@ -6,7 +6,6 @@ description = "A tools to help edit markdown."
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/jason1105/hugox"
-license-file = "LICENSE"
 keywords = ["markdown", "tools", "cli"]
 categories = ["command-line-utilities"]
 

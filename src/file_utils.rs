@@ -25,7 +25,7 @@ pub fn copy<T: AsRef<Path>>(src: T, dst: T) -> Result<()> {
 pub fn remove_file<T: AsRef<Path>>(file: T) -> Result<()> {
     if Path::new(file.as_ref()).exists() {
         // to avoid permission denied, don't unwrap
-        std::fs::remove_file(file.as_ref());
+        let _ = std::fs::remove_file(file.as_ref());
     }
 
     Ok(())

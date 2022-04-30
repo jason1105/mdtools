@@ -1,5 +1,6 @@
-// mdtools subcommand flags... arguments... paths...
+#![warn(clippy::all, clippy::pedantic)]
 
+// mdtools subcommand flags... arguments... paths...
 mod commands;
 
 mod prelude {
