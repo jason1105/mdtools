@@ -6,6 +6,8 @@ mod prelude {
     pub use mdtools::commands::*;
 }
 
+use std::cell::{Cell, RefCell};
+
 use prelude::*;
 
 /// Simple program to add tags to files.
@@ -20,6 +22,7 @@ struct Cli {
 enum Commands {
     /// Add tags to file.
     AddTag(add_tag::AddTag),
+    MkFootlinks(mk_footlinks::MkFootlinks),
 }
 
 fn main() {
@@ -29,6 +32,10 @@ fn main() {
         Commands::AddTag(add_tag_command) => {
             print!("{:?}", add_tag_command);
             add_tag_command.run();
+        }
+        Commands::MkFootlinks(command) => {
+            print!("Run command: {:?}", command);
+            command.run();
         }
     }
 }

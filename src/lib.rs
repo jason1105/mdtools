@@ -6,7 +6,10 @@ mod prelude {
     pub use crate::file_utils;
     pub use clap::Args;
     pub use clap::{Parser, Subcommand};
+    pub use lazy_static::lazy_static;
     pub use regex::Regex;
+    pub use std::fs::OpenOptions;
+    pub use std::io::BufRead;
     pub use std::{
         collections::BTreeSet,
         ffi::OsString,

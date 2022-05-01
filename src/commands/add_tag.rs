@@ -105,10 +105,6 @@ fn extend_tag(old_tag_line: &str, new_tags: &[String]) -> String {
 ///     assert_eq!(end, 53);
 /// ```
 pub fn extract_tag_line(file: &OsString) -> Result<(String, usize, usize)> {
-    use std::io::BufRead;
-
-    use std::fs::OpenOptions;
-
     let file = OpenOptions::new()
         .read(true)
         .write(true)
