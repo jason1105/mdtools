@@ -24,10 +24,7 @@ fn test_do_add_tag() {
     // prepare file for test
     file_utils::copy(&ORIGIN_FILE.to_str().unwrap(), &TEST_FILE.to_str().unwrap()).unwrap();
 
-    let new_tags = vec![
-        "这是一个测试字符串".to_string(),
-        "这是另一个测试字符串".to_string(),
-    ];
+    let new_tags = vec!["This_is_a_test_string".to_string(), "This_too".to_string()];
 
     add_new_tag(&new_tags, &TEST_FILE);
 

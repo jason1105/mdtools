@@ -7,7 +7,9 @@ mod prelude {
     pub use clap::Args;
     pub use clap::{Parser, Subcommand};
     pub use lazy_static::lazy_static;
+    pub use log::{info, warn};
     pub use regex::Regex;
+    pub use std::collections::HashSet;
     pub use std::fs::OpenOptions;
     pub use std::io::BufRead;
     pub use std::{
@@ -15,5 +17,9 @@ mod prelude {
         ffi::OsString,
         io::{BufReader, Error, ErrorKind, Result},
         path::PathBuf,
+    };
+    pub use std::{
+        fmt::{Display, Formatter},
+        io::Write,
     };
 }
