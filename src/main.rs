@@ -33,7 +33,7 @@ fn main() {
     let args = Cli::parse();
 
     info!("Run command: {:?}", args.command);
-    let mut result: io::Result<()> = Ok(());
+    let result: io::Result<()>;
 
     match args.command {
         Commands::AddTag(add_tag_command) => {
