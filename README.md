@@ -31,7 +31,7 @@ Content before
 
 Run command
 
-![](https://i.imgur.com/AyA0QkY.png)
+![](https://i.imgur.com/sNgynUp.png)
 
 Have done
 
