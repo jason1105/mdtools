@@ -7,6 +7,8 @@ mod prelude {
     pub use mdtools::commands::*;
 }
 
+use std::io;
+
 use prelude::*;
 
 /// Simple program to add tags to files.
@@ -31,13 +33,20 @@ fn main() {
     let args = Cli::parse();
 
     info!("Run command: {:?}", args.command);
+    let mut result: io::Result<()> = Ok(());
+
     match args.command {
         Commands::AddTag(add_tag_command) => {
-            add_tag_command.run();
+            result = add_tag_command.run();
         }
         Commands::MakeFootlink(command) => {
-            command.run();
+            result = command.run();
         }
     }
-    println!("\x1b[32m{}\x1b[0m", "Complete.");
+
+    if let Ok(()) = result {
+        println!("\x1b[32m{}\x1b[0m", "Completed.");
+    } else {
+        println!("\x1b[31m{}\x1b[0m", result.err().unwrap());
+    }
 }

@@ -15,15 +15,15 @@ pub struct AddTag {
 
 /// Implements the `RunCommand` trait.
 impl RunCommand for AddTag {
-    fn run(&self) {
-        self.add_tag();
+    fn run(&self) -> Result<()> {
+        self.add_tag()
     }
 }
 
 /// Implements the command of add-tag
 impl AddTag {
     /// Entry point of the command `add_tag()`.
-    fn add_tag(&self) {
+    fn add_tag(&self) -> Result<()> {
         let Self { tags, path } = self;
 
         // get files
@@ -31,16 +31,20 @@ impl AddTag {
         // add tags
         for file in files {
             println!("Updating file : {}", file.as_os_str().to_str().unwrap());
-            add_new_tag(tags, &file);
+            add_new_tag(tags, &file)?;
         }
+
+        Ok(())
     }
 }
 
 /// Add tags to file.
-pub fn add_new_tag(new_tags: &[String], file: &OsString) {
-    let (line, start, end) = extract_tag_line(file).unwrap();
+pub fn add_new_tag(new_tags: &[String], file: &OsString) -> Result<()> {
+    let (line, start, end) = extract_tag_line(file)?;
     let new_line = extend_tag(&line, new_tags);
-    file_utils::replace_in_file(file, start, end, new_line).unwrap();
+    file_utils::replace_in_file(file, start, end, new_line)?;
+
+    Ok(())
 }
 
 /// Extend tag line with new tags.

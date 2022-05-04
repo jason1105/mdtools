@@ -1,7 +1,9 @@
-# hugox
-A companion to help edit markdown files.
+# Mdtools
 
-# Subcommands
+Mdtools is a tool used for editing markdown file. It is able to:
+
+- Add tag into frontmatter.
+- Make footlinks.
 
 ## Add tags
 

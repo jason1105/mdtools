@@ -22,7 +22,7 @@ pub struct MakeFootlink {
 
 /// Implements the `RunCommand` trait for mk-footlinks
 impl RunCommand for MakeFootlink {
-    fn run(&self) {
+    fn run(&self) -> Result<()> {
         let Self { path } = self;
 
         // get files
@@ -32,10 +32,10 @@ impl RunCommand for MakeFootlink {
         for file in files {
             info!("Updating file : {}", file.as_os_str().to_str().unwrap());
             let mut mdfile = MDFile::new(file);
-            if let Err(e) = mdfile.make_footlinks() {
-                panic!("{}", e);
-            }
+            mdfile.make_footlinks()?;
         }
+
+        Ok(())
     }
 }
 
