@@ -1,5 +1,5 @@
 use lazy_static::lazy_static;
-use mdtools::commands::mk_footlinks::*;
+use mdtools::commands::make_footlink::*;
 use mdtools::file_utils;
 use std::ffi::OsString;
 

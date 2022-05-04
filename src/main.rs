@@ -22,7 +22,7 @@ enum Commands {
     /// Add tags to file.
     AddTag(add_tag::AddTag),
     /// Make footer links.
-    MkFootlinks(mk_footlinks::MkFootlinks),
+    MakeFootlink(make_footlink::MakeFootlink),
 }
 
 // env RUST_LOG=info cargo run mk-footlinks --path /c/temp/Readme.md
@@ -35,7 +35,7 @@ fn main() {
         Commands::AddTag(add_tag_command) => {
             add_tag_command.run();
         }
-        Commands::MkFootlinks(command) => {
+        Commands::MakeFootlink(command) => {
             command.run();
         }
     }

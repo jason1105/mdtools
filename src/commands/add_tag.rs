@@ -33,7 +33,6 @@ impl AddTag {
             println!("Updating file : {}", file.as_os_str().to_str().unwrap());
             add_new_tag(tags, &file);
         }
-        println!("Complete.");
     }
 }
 
@@ -122,6 +121,7 @@ pub fn extract_tag_line(file: &OsString) -> Result<(String, usize, usize)> {
             Ok(0) => return Err(Error::new(ErrorKind::Other, "No tag line found")),
             Ok(size) => {
                 if re.is_match(&line) {
+                    debug!("line: {}", line);
                     return Ok((line, i, i + size));
                 }
 

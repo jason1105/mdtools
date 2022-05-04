@@ -14,14 +14,14 @@ lazy_static! {
 
 /// Subcommand `mk-footlinks`
 #[derive(Args, Debug)]
-pub struct MkFootlinks {
+pub struct MakeFootlink {
     /// File path or directory path
     #[clap(short, long, parse(from_os_str), value_name = "FILE")]
     path: PathBuf,
 }
 
 /// Implements the `RunCommand` trait for mk-footlinks
-impl RunCommand for MkFootlinks {
+impl RunCommand for MakeFootlink {
     fn run(&self) {
         let Self { path } = self;
 

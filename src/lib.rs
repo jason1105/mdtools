@@ -7,7 +7,7 @@ mod prelude {
     pub use clap::Args;
     pub use clap::{Parser, Subcommand};
     pub use lazy_static::lazy_static;
-    pub use log::{info, warn};
+    pub use log::{debug, info, warn};
     pub use regex::Regex;
     pub use std::collections::HashSet;
     pub use std::fs::OpenOptions;

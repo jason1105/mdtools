@@ -1,4 +1,4 @@
-//! A lib for basic file operations.
+//! Basic file operations.
 
 use std::ffi::OsString;
 use std::io::{BufReader, BufWriter, Read, Result, Write};
