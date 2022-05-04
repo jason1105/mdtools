@@ -1,38 +1,43 @@
 # Mdtools
 
-Mdtools is a tool used for editing markdown file. It is able to:
+Mdtools is a little tool used for editing markdown file. It is able to:
 
 - Add tag into frontmatter.
 - Make footlinks.
 
+# Usage
+
 ## Add tags
 
-Update tags of frontmatter of files.
+Content before:
 
-Before run
-
-```rust
-// C:\mdfiles\Readings.md
----
-tags: [readings]
----
-...
-
-```
+![](https://i.imgur.com/ZlatH2s.png)
 
 Run command
 
-```
-$ hugox add-tag "C:\mdfiles\" news books
-```
+![](https://i.imgur.com/pralDiV.png)
 
-After run
+Have done
 
-```rust
-// C:\mdfiles\Readings.md
----
-tags: [books, news, readings]
----
-...
+![](https://i.imgur.com/XhtrFvf.png)
 
-```
+## Make footlinks
+
+Footlinks refers to Reference-style link.
+
+Content before
+
+![](https://i.imgur.com/EL05vMO.png)
+
+Run command
+
+![](https://i.imgur.com/AyA0QkY.png)
+
+Have done
+
+![](https://i.imgur.com/EouiSu1.png)
+
+
+# Issues
+
+Welcome to write issues if you have any question.
