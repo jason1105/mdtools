@@ -32,3 +32,8 @@ Legal information.
 Resources for getting help.
 
 [Documentation Overview](https://docs.spring.io/spring-boot/docs/current/reference/html/documentation.html#documentation)
+
+[`Default`](https://doc.rust-lang.org/std/default/trait.Default.html "Default")
+[`take`](https://doc.rust-lang.org/std/cell/struct.Cell.html#method.take) 
+[`Default::default()`](https://doc.rust-lang.org/std/default/trait.Default.html#tymethod.default "Default::default()") 
+ 
