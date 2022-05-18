@@ -3,7 +3,7 @@ use std::path::Path;
 use crate::prelude::*;
 
 // Pattern for links
-static LINK_PATTERN: &str = r#"(?P<title>\[.+?\])(?P<link>\(\S+(\s".*?")?\))"#;
+static LINK_PATTERN: &str = r#"(?P<title>\[.+?\])(?P<link>\(\S+?(\s".*?")?\))"#;
 static FOOT_LINK_PATTERN: &str = r"(?P<title>\[.+?\]) ?\[(?P<label>.+?)]";
 
 lazy_static! {
