@@ -191,6 +191,7 @@ where
             let start = *start as usize;
             let end = *end as usize;
             line.replace_range(start..end, label);
+            escape_link(&mut line, 1, start - 1);
         });
         self.lines.push(line);
     }
@@ -216,9 +217,23 @@ impl Display for FootLink {
     }
 }
 
+fn escape_link(line: &mut String, start: usize, end: usize) {
+    line.replace_range(
+        start..end,
+        &line[start..end].replace("[", r"\[").replace("]", r"\]"),
+    );
+}
+
 #[test]
 fn test_add_line() {
     let mut md = MDFile::new("");
     let line = "sfasfsaf[abc](http://abc)..sdfsdfs.......sfsf[123](http://123)".into();
     md.add_line(line)
+}
+
+#[test]
+fn test_replace_range() {
+    let mut string = "[[1]](https://zh)".to_string();
+    escape_link(&mut string, 1, 4);
+    assert_eq!(r"[\[1\]](https://zh)", string);
 }
