@@ -37,5 +37,8 @@ Resources for getting help.
 [`take`](https://doc.rust-lang.org/std/cell/struct.Cell.html#method.take) 
 [`Default::default()`](https://doc.rust-lang.org/std/default/trait.Default.html#tymethod.default "Default::default()") 
 
-[[1]](https://zh.wikipedia.org/wiki/%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8#cite_note-1)
+[](http://abc)
+## [](http://abc)
+[[1]](https://zh)
+## [[1]](https://zh)
  

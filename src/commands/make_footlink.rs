@@ -3,7 +3,7 @@ use std::path::Path;
 use crate::prelude::*;
 
 // Pattern for links
-static LINK_PATTERN: &str = r#"(?P<title>\[.+?\])(?P<link>\(\S+?(\s".*?")?\))"#;
+static LINK_PATTERN: &str = r#"(?P<title>\[.*?\])(?P<link>\(\S+?(\s".*?")?\))"#;
 static FOOT_LINK_PATTERN: &str = r"(?P<title>\[.+?\]) ?\[(?P<label>.+?)]";
 
 lazy_static! {
@@ -161,14 +161,20 @@ where
     }
 
     fn add_line(&mut self, mut line: String) {
-        let mut position: Vec<(usize, usize, String)> = vec![]; // start, end, idx.  [abc](http://abc) -> (5, 16, "footlinks-1")
+        let mut position: Vec<(usize, usize, usize, String)> = vec![]; // title_start, url_start, url_end, idx.  [abc](http://abc) -> (1, 5, 16, "footlinks-1")
 
         for caps in REG_NORMAL_LINK.captures_iter(&line) {
             let link = caps.name("link");
+            let title_start = Some(caps.name("title").unwrap().start());
 
             println!(
-                "Found link: {}\x1b[33m{}\x1b[0m",
-                &caps["title"], &caps["link"]
+                "Found link: {}\x1b[33m{}\x1b[0m, {},{},{},{}",
+                &caps["title"],
+                &caps["link"],
+                title_start.unwrap_or_default(),
+                caps.name("title").unwrap().end(),
+                link.unwrap().start(),
+                link.unwrap().end(),
             );
 
             info!(
@@ -178,21 +184,22 @@ where
                 &caps["link"],
             );
 
-            let start = link.unwrap().start();
-            let end = link.unwrap().end(); // exclude index
+            let url_start = link.unwrap().start();
+            let url_end = link.unwrap().end(); // exclude index
             let label = format_footer_label(self.foot_label_idx);
-            position.push((start, end, label.clone()));
+            position.push((title_start.unwrap(), url_start, url_end, label.clone()));
             self.footlinks
                 .push(FootLink::new(&caps["link"], label.clone()));
             self.foot_label_idx += 1;
         }
 
-        position.iter().rev().for_each(|(start, end, label)| {
-            let start = *start as usize;
-            let end = *end as usize;
-            line.replace_range(start..end, label);
-            escape_link(&mut line, 1, start - 1);
-        });
+        position
+            .iter()
+            .rev()
+            .for_each(|(title_start, url_start, url_end, label)| {
+                line.replace_range(*url_start..*url_end, label);
+                escape_link(&mut line, *title_start + 1, *url_start - 1);
+            });
         self.lines.push(line);
     }
 }
@@ -217,6 +224,9 @@ impl Display for FootLink {
     }
 }
 
+/// start, inclusive.
+/// end, exclusive
+/// escape_link("[[menu]][1]", 1, 7) -> "[\[menu\]][1]"
 fn escape_link(line: &mut String, start: usize, end: usize) {
     line.replace_range(
         start..end,
@@ -233,7 +243,7 @@ fn test_add_line() {
 
 #[test]
 fn test_replace_range() {
-    let mut string = "[[1]](https://zh)".to_string();
+    let mut string = "## [[1]](https://zh)".to_string();
     escape_link(&mut string, 1, 4);
     assert_eq!(r"[\[1\]](https://zh)", string);
 }
