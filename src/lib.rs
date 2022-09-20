@@ -12,6 +12,7 @@ mod prelude {
     pub use std::collections::HashSet;
     pub use std::fs::OpenOptions;
     pub use std::io::BufRead;
+    pub use std::path::Path;
     pub use std::{
         collections::BTreeSet,
         ffi::OsString,
