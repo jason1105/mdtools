@@ -1,5 +1,3 @@
-use std::path;
-
 use crate::prelude::*;
 
 /// A trait used to define the command line interface of a program.
@@ -15,8 +13,7 @@ pub trait ObsidianFile<T>
 where
     T: AsRef<Path>,
 {
-    fn to_local_imgs(&self) -> Vec<T>;
-    fn to_local_links(&self) -> Vec<T>;
+    fn extract_img(&mut self) -> HashMap<String, PathBuf>;
 }
 
 pub trait HugoFile<T>
@@ -27,16 +24,9 @@ where
     fn home_dir(&self) -> Result<T>;
     fn post_dir(&self) -> Result<T>;
     fn img_dir(&self) -> Result<T>;
+    fn localize_img(&mut self) -> Vec<&T>;
 }
 
 pub trait MarkdownFile {
-    fn save(&self) -> Result<()>;
-}
-
-pub trait MDGit<T>
-where
-    T: AsRef<Path>,
-{
-    fn add_all(&self) -> Result<()>;
-    fn commit_and_push(&self) -> Result<()>;
+    fn save(&self, is_obsidian: bool) -> Result<()>;
 }

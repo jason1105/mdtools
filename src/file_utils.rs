@@ -6,10 +6,21 @@ use std::path::PathBuf;
 use std::{fs::OpenOptions, path::Path};
 
 pub fn copy<T: AsRef<Path>>(src: T, dst: T) -> Result<()> {
-    let mut buf = String::new();
+    let mut buf = vec![];
 
-    let mut file_for_read = OpenOptions::new().read(true).open(src).unwrap();
-    file_for_read.read_to_string(&mut buf)?;
+    let mut file_for_read = OpenOptions::new().read(true).open(src.as_ref()).unwrap();
+    file_for_read.read_to_end(&mut buf)?;
+
+    let dst = if dst.as_ref().is_dir() {
+        dst.as_ref().join(
+            src.as_ref()
+                .file_name()
+                .map(|name| PathBuf::from(name.to_str().unwrap()))
+                .unwrap(),
+        )
+    } else {
+        dst.as_ref().to_path_buf()
+    };
 
     let mut file_for_write = OpenOptions::new()
         .write(true)
@@ -17,7 +28,7 @@ pub fn copy<T: AsRef<Path>>(src: T, dst: T) -> Result<()> {
         .truncate(true)
         .open(dst)
         .unwrap();
-    file_for_write.write_all(buf.as_bytes())?;
+    file_for_write.write_all(&buf)?;
 
     Ok(())
 }
@@ -75,4 +86,22 @@ pub fn list_all_files(dir: &PathBuf) -> Vec<OsString> {
             paths.push(entry.unwrap().path().as_os_str().to_os_string());
         });
     paths
+}
+
+pub fn read_file(path: impl AsRef<Path>) -> Result<Vec<String>> {
+    use std::io::BufRead;
+    let file = OpenOptions::new().read(true).open(path)?;
+    let mut reader = BufReader::new(file);
+    let mut line = String::new();
+    let mut ret = vec![];
+    while let Ok(i) = reader.read_line(&mut line) {
+        if i > 0 {
+            ret.push(line.clone());
+            line.clear();
+        } else {
+            break;
+        }
+    }
+
+    Ok(ret)
 }
