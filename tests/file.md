@@ -39,6 +39,7 @@ Resources for getting help.
 
 [](http://abc)
 ## [](http://abc)
-[[1]](https://zh)
-## [[1]](https://zh)
+[[]][\[1\]](https://zh)
+## [\[1\]](https://zh)
+[\[1\]][12], [\[1\]](https://zh)
  

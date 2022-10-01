@@ -228,10 +228,10 @@ impl Display for FootLink {
 /// end, exclusive
 /// escape_link("[[menu]][1]", 1, 7) -> "[\[menu\]][1]"
 fn escape_link(line: &mut String, start: usize, end: usize) {
-    line.replace_range(
-        start..end,
-        &line[start..end].replace("[", r"\[").replace("]", r"\]"),
-    );
+    // line.replace_range(
+    //     start..end,
+    //     &line[start..end].replace("[", r"\[").replace("]", r"\]"),
+    // );
 }
 
 #[test]
