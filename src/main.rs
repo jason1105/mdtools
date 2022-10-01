@@ -25,6 +25,7 @@ enum Commands {
     AddTag(add_tag::AddTag),
     /// Make footer links.
     MakeFootlink(make_footlink::MakeFootlink),
+    Publish(publish::Publish)
 }
 
 // env RUST_LOG=info cargo run mk-footlinks --path /c/temp/Readme.md
@@ -40,6 +41,9 @@ fn main() {
             result = add_tag_command.run();
         }
         Commands::MakeFootlink(command) => {
+            result = command.run();
+        }
+        Commands::Publish(command) => {
             result = command.run();
         }
     }

@@ -268,7 +268,7 @@ where
             let mut pb = PathBuf::from(path);
             pb.push("config.toml");
             if pb.exists() {
-                return Ok(pb);
+                return Ok(path.to_path_buf());
             }
             dir = dir.parent().unwrap();
         }
@@ -281,7 +281,53 @@ where
     T: AsRef<Path>,
 {
     fn add_all(&self) -> Result<()> {
-        todo!()
+        fn run_cmd(path: &std::path::PathBuf) {
+            if cfg!(target_os = "windows") {
+                let add_cmd = Command::new("git")
+                    .arg("add")
+                    .arg(".")
+                    .current_dir(&path)
+                    .output();
+                handle_cmd_output("git add", add_cmd, "git add command failed to start");
+
+                let commit_cmd_output = Command::new("git")
+                    .arg("commit")
+                    .arg("-m")
+                    .arg("\"auto commit\"")
+                    .current_dir(&path)
+                    .output();
+                handle_cmd_output(
+                    "git commit",
+                    commit_cmd_output,
+                    "git commit  command failed to start",
+                );
+
+                let push_cmd = Command::new("git").arg("push").current_dir(&path).output();
+                handle_cmd_output("git push", push_cmd, "git push command failed to start");
+            }
+        }
+
+        fn handle_cmd_output(cmd: &str, output: Result<Output>, msg: &str) {
+            info!("Command \"{}\" have been called, output: {:?}", cmd, output);
+            let output = output.expect(msg);
+
+            match output.status.code() {
+                Some(code) if code <= 1 => println!("Command \"{}\" success.", cmd),
+                _ => {
+                    eprintln!(
+                        "Command \"{}\" failed: {}",
+                        cmd,
+                        String::from_utf8_lossy(&output.stderr)
+                    );
+                    // panic!()
+                }
+            }
+        }
+
+        let hugo_home = self.home_dir().expect("No hugo home be seen.");
+        run_cmd(&hugo_home);
+
+        Ok(())
     }
 
     fn commit_and_push(&self) -> Result<()> {

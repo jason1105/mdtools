@@ -18,6 +18,8 @@ mod prelude {
     pub use std::fs::OpenOptions;
     pub use std::io::BufRead;
     pub use std::path::Path;
+    pub use std::process::Command;
+    pub use std::process::Output;
     pub use std::{
         collections::BTreeSet,
         ffi::OsString,
