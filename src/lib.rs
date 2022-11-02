@@ -15,6 +15,7 @@ mod prelude {
     pub use regex::Regex;
     pub use std::collections::HashMap;
     pub use std::collections::HashSet;
+    pub use std::fs;
     pub use std::fs::OpenOptions;
     pub use std::io::BufRead;
     pub use std::path::Path;
